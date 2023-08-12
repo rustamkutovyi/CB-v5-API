@@ -1,0 +1,12 @@
+{
+  "name": "cb-v5-api",
+  "version": "1.0.0",
+  "description": "simple api automation test",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Rustam Kutovyi",
+  "license": "ISC"
+}
