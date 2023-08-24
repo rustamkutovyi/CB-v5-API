@@ -1,24 +1,33 @@
 import { expect } from 'chai'
 
-console.log('reading example spec')
+console.log('Reading example spec')
 
-describe('First test', function () {
+describe('first test', function () {
+  before(() => {
+    console.log('Before hook')
+  })
+
+  beforeEach(() => {
+    console.log('Before each hook')
+  })
+
   it('check sum function', function () {
-    let a = 234543434352345
+    let a = 2
     expect(a + a).to.eq(a * 2)
-    expect(1 + 1).to.eq(2)
   })
   it('check mult function', function () {
-    expect(5 * 1).to.eq(5)
+    expect(2 * 2).to.eq(4)
   })
+
   after(() => {
     console.log('After hook')
   })
+
   afterEach(() => {
     console.log('After each hook')
   })
 })
-console.log('reading done')
+console.log('Reading done')
 
 describe('second test', function () {
   it('check string length', function () {
