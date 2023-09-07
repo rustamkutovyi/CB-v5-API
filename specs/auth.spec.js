@@ -1,21 +1,22 @@
 import { expect } from 'chai'
 import request from 'supertest'
+import 'dotenv/config'
 
 describe('Authentication', () => {
   describe('Authentication with valid credentials', () => {
     it('validate response message', async () => {
       let res
-      res = await request('https://clientbase-server.herokuapp.com/v5')
+      res = await request(process.env.BASE_URL)
         .post('/user/login')
-        .send({ email: 'jeff3@martin.com', password: '12345' })
+        .send({ email: process.env.EMAIL, password: process.env.PASSWORD })
 
       expect(res.body.message).to.eq('Auth success')
     })
     it('validate status code', async () => {
       let res
-      res = await request('https://clientbase-server.herokuapp.com/v5')
+      res = await request(process.env.BASE_URL)
         .post('/user/login')
-        .send({ email: 'jeff3@martin.com', password: '12345' })
+        .send({ email: process.env.EMAIL, password: process.env.PASSWORD })
 
       expect(res.statusCode).to.eq(200)
     })
@@ -31,34 +32,34 @@ describe('Authentication', () => {
 
     it('check if success return true', async () => {
       let res
-      res = await request('https://clientbase-server.herokuapp.com/v5')
+      res = await request(process.env.BASE_URL)
         .post('/user/login')
-        .send({ email: 'jeff3@martin.com', password: '12345' })
+        .send({ email: process.env.EMAIL, password: process.env.PASSWORD })
       expect(res.body.success).to.be.a('boolean')
     })
 
     it('check if acl is array', async () => {
       let res
-      res = await request('https://clientbase-server.herokuapp.com/v5')
+      res = await request(process.env.BASE_URL)
         .post('/user/login')
-        .send({ email: 'jeff3@martin.com', password: '12345' })
+        .send({ email: process.env.EMAIL, password: process.env.PASSWORD })
       expect(res.body.payload.acl).to.be.a('array')
     })
 
     it('check confirmation link', async () => {
       let res
-      res = await request('https://clientbase-server.herokuapp.com/v5')
+      res = await request(process.env.BASE_URL)
         .post('/user/login')
-        .send({ email: 'jeff3@martin.com', password: '12345' })
+        .send({ email: process.env.EMAIL, password: process.env.PASSWORD })
       expect(res.body.payload.confirmEmailLink).to.include(
         '/user/verify/email/'
       )
     })
     it('check if user id is a string', async () => {
       let res
-      res = await request('https://clientbase-server.herokuapp.com/v5')
+      res = await request(process.env.BASE_URL)
         .post('/user/login')
-        .send({ email: 'jeff3@martin.com', password: '12345' })
+        .send({ email: process.env.EMAIL, password: process.env.PASSWORD })
       expect(res.body.payload.userId).to.be.a('string')
     })
   })
