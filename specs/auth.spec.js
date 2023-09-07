@@ -1,7 +1,6 @@
 import { expect } from 'chai'
 import request from 'supertest'
 import 'dotenv/config'
-import { configDotenv } from 'dotenv'
 
 describe('Authentication', () => {
   describe('Authentication with valid credentials', () => {
