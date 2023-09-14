@@ -1,14 +1,13 @@
 import { expect } from 'chai'
 import request from 'supertest'
 import 'dotenv/config'
+import { logIn } from '../helpers/general-helper'
 
 describe('Authentication', () => {
   describe('Authentication with valid credentials', () => {
     let res
     before(async () => {
-      res = await request(process.env.BASE_URL)
-        .post('/user/login')
-        .send({ email: process.env.EMAIL, password: process.env.PASSWORD })
+      res = await logIn(process.env.EMAIL, process.env.PASSWORD)
     })
 
     it('validate response message', async () => {
@@ -42,9 +41,7 @@ describe('Authentication', () => {
   describe('Auth with invalid credentials', () => {
     it('validate status code entering invalid email', async () => {
       let res
-      res = await request('https://clientbase-server.herokuapp.com/v5')
-        .post('/user/login')
-        .send({ email: 'jeff334@martin.com', password: '12345' })
+      res = await logIn('invalid', 'invalid')
 
       expect(res.statusCode).to.eq(400)
     })
