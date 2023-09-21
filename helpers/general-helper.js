@@ -6,4 +6,10 @@ function logIn(email, password) {
     .send({ email, password })
 }
 
+function register(firstName, lastName, email, password) {
+  return request(process.env.BASE_URL)
+    .post('/user')
+    .send({ firstName, lastName, email, password })
+}
+export { register }
 export { logIn }
