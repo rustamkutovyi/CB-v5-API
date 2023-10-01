@@ -39,8 +39,8 @@ describe('Authentication', () => {
     })
   })
   describe('Auth with invalid credentials', () => {
+    let res
     it('validate status code entering invalid email', async () => {
-      let res
       res = await logIn('invalid', 'invalid')
 
       expect(res.statusCode).to.eq(400)
@@ -48,7 +48,7 @@ describe('Authentication', () => {
 
     it('validate response message entering invalid email', async () => {
       let res
-      res = await request('https://clientbase-server.herokuapp.com/v5')
+      res = await request(process.env.BASE_URL + '/v5')
         .post('/user/login')
         .send({ email: 'jeff334@martin.com', password: '12345' })
 
@@ -57,7 +57,7 @@ describe('Authentication', () => {
 
     it('validate status code entering invalid password', async () => {
       let res
-      res = await request('https://clientbase-server.herokuapp.com/v5')
+      res = await request(process.env.BASE_URL + '/v5')
         .post('/user/login')
         .send({ email: 'jeff334@martin.com', password: '123' })
 
@@ -66,7 +66,7 @@ describe('Authentication', () => {
 
     it('validate response message entering invalid password', async () => {
       let res
-      res = await request('https://clientbase-server.herokuapp.com/v5')
+      res = await request(process.env.BASE_URL + '/v5')
         .post('/user/login')
         .send({ email: 'jeff334@martin.com', password: '123' })
 
@@ -75,7 +75,7 @@ describe('Authentication', () => {
 
     it('validate status code entering both invalid email and password', async () => {
       let res
-      res = await request('https://clientbase-server.herokuapp.com/v5')
+      res = await request(process.env.BASE_URL + '/v5')
         .post('/user/login')
         .send({ email: 'jeff332@martin.com', password: '123' })
 
@@ -84,7 +84,7 @@ describe('Authentication', () => {
 
     it('validate message response entering both invalid email and password', async () => {
       let res
-      res = await request('https://clientbase-server.herokuapp.com/v5')
+      res = await request(process.env.BASE_URL + '/v5')
         .post('/user/login')
         .send({ email: 'jeff332@martin.com', password: '123' })
 
