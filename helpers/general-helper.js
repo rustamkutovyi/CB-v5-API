@@ -1,10 +1,18 @@
 import request from 'supertest'
+
 const chance = require('chance').Chance()
 
 function logIn(email, password) {
   return request(process.env.BASE_URL + '/v5')
     .post('/user/login')
     .send({ email, password })
+}
+
+function createClient(name = chance.first(), phone = '34732394239', email) {
+  return request(process.env.BASE_URL)
+    .post('/v5/client')
+    .send({ name, phone, email })
+    .set('Authorization', process.env.TOKEN)
 }
 
 function register(
@@ -17,4 +25,5 @@ function register(
     .post('/user')
     .send({ firstName, lastName, email, password })
 }
-export { logIn, register }
+
+export { logIn, register, createClient }
