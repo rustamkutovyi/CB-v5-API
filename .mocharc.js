@@ -4,4 +4,6 @@ module.exports = {
   spec: 'specs/**/*.js',
   ignore: 'specs/example.spec.js',
   file: 'project-config/auth-global.hook.js',
+  reporter: 'mochawesome',
+  reporterOption: ['json=false', 'reportDir=MyReports'],
 }
