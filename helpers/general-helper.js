@@ -8,7 +8,7 @@ function logIn(email, password) {
     .send({ email, password })
 }
 
-function createClient(name = chance.first(), phone = '34732394239', email) {
+function createClient(name = chance.first(), phone = Date.now(), email) {
   return request(process.env.BASE_URL)
     .post('/v5/client')
     .send({ name, phone, email })
