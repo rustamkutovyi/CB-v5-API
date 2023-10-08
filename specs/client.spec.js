@@ -1,20 +1,15 @@
-import { logIn } from '../helpers/general-helper'
 import {
   createClient,
   searchClientByID,
   searchAllClients,
   searchClientByName,
+  editClient,
+  deleteClient,
 } from '../helpers/client-helper'
 import { expect } from 'chai'
-import request from 'supertest'
 
 describe('Client', () => {
   let response
-  before(async () => {
-    await logIn(process.env.EMAIL, process.env.PASSWORD)
-  })
-
-  afterEach(async () => {})
 
   it('Create client', async () => {
     response = await createClient()
@@ -42,5 +37,19 @@ describe('Client', () => {
 
     await expect(response.statusCode).to.eq(200)
     await expect(response.body.message).to.eq('ClientSearch ok')
+  })
+
+  it('Edit client', async () => {
+    response = await editClient()
+
+    await expect(response.statusCode).to.eq(200)
+    await expect(response.body.message).to.eq('Client updated')
+  })
+
+  it('Delete client', async () => {
+    response = await deleteClient()
+
+    await expect(response.statusCode).to.eq(200)
+    await expect(response.body.message).to.eq('Client deleted')
   })
 })

@@ -1,6 +1,6 @@
 import 'dotenv/config'
 import { logIn } from '../helpers/general-helper'
-import { createClient } from '../helpers/client-helper'
+import { createClient, deleteClient } from '../helpers/client-helper'
 import { searchAllClients } from '../helpers/client-helper'
 
 before(async () => {
@@ -19,4 +19,8 @@ before(async () => {
   const response = await searchAllClients()
 
   process.env.CLIENT_NAME = response.body.payload.items[0].name
+})
+
+after(async () => {
+  await deleteClient()
 })

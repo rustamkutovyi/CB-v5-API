@@ -28,4 +28,28 @@ function searchClientByName() {
     .set('Authorization', process.env.TOKEN)
 }
 
-export { createClient, searchClientByID, searchAllClients, searchClientByName }
+function editClient(
+  name = chance.first(),
+  phone = Date.now(),
+  email = 'user_' + Date.now() + '@gmail.com'
+) {
+  return request(process.env.BASE_URL)
+    .patch('/v5/client/' + process.env.ID)
+    .send(name, phone, email)
+    .set('Authorization', process.env.TOKEN)
+}
+
+function deleteClient() {
+  return request(process.env.BASE_URL)
+    .delete('/v5/client/' + process.env.ID)
+    .set('Authorization', process.env.TOKEN)
+}
+
+export {
+  createClient,
+  searchClientByID,
+  searchAllClients,
+  searchClientByName,
+  editClient,
+  deleteClient,
+}
