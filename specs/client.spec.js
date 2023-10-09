@@ -1,4 +1,3 @@
-
 import {
   createClient,
   searchClientByID,
@@ -54,4 +53,3 @@ describe('Client', () => {
     await expect(response.body.message).to.eq('Client deleted')
   })
 })
-
