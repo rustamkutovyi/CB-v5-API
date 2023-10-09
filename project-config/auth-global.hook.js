@@ -19,6 +19,7 @@ before(async () => {
   const response = await searchAllClients()
 
   process.env.CLIENT_NAME = response.body.payload.items[0].name
+  process.env.PHONE = response.body.payload.items[0].phone
 })
 
 after(async () => {

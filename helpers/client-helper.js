@@ -27,7 +27,12 @@ function searchClientByName() {
     .send({ name: process.env.CLIENT_NAME })
     .set('Authorization', process.env.TOKEN)
 }
-
+function searchClientByPhone() {
+  return request(process.env.BASE_URL)
+    .post('/v5/client/search')
+    .send({ phone: process.env.PHONE })
+    .set('Authorization', process.env.TOKEN)
+}
 function editClient(
   name = chance.first(),
   phone = Date.now(),
@@ -52,4 +57,5 @@ export {
   searchClientByName,
   editClient,
   deleteClient,
+  searchClientByPhone,
 }

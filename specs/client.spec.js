@@ -5,6 +5,7 @@ import {
   searchClientByName,
   editClient,
   deleteClient,
+  searchClientByPhone,
 } from '../helpers/client-helper'
 import { expect } from 'chai'
 
@@ -37,6 +38,13 @@ describe('Client', () => {
 
     await expect(response.statusCode).to.eq(200)
     await expect(response.body.message).to.eq('ClientSearch ok')
+  })
+
+  it('Search client by phone', async () => {
+    response = await searchClientByPhone()
+
+    expect(response.statusCode).to.eq(200)
+    expect(response.body.message).to.eq('ClientSearch ok')
   })
 
   it('Edit client', async () => {
