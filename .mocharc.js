@@ -3,7 +3,10 @@ module.exports = {
   timeout: '5000',
   spec: 'specs/**/*.js',
   ignore: 'specs/example.spec.js',
-  file: 'project-config/auth-global.hook.js',
+  file: [
+    'project-config/auth-global.hook.js',
+    'project-config/service.hook.js',
+  ],
   reporter: 'mochawesome',
   reporterOption: ['json=false', 'reportDir=MyReports'],
 }
