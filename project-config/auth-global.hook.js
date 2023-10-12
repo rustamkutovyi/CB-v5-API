@@ -43,6 +43,6 @@ before(async () => {
   process.env.VENDOR_NAME = response.body.payload.items[0].name
 })
 
-after(async () => {
-  await deleteVendor()
-})
+// after(async () => {
+//   await deleteVendor()
+// })
