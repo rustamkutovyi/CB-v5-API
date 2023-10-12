@@ -6,6 +6,7 @@ module.exports = {
   file: [
     'project-config/auth-global.hook.js',
     'project-config/service.hook.js',
+    'project-config/order-hook.js',
   ],
   reporter: 'mochawesome',
   reporterOption: ['json=false', 'reportDir=MyReports'],
