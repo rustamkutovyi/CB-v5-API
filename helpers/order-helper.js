@@ -31,4 +31,25 @@ function getOrderById() {
     .set('Authorization', process.env.TOKEN)
 }
 
-export { createOrder, getAllOrders, getOrderById }
+function editOrder() {
+  const randomNumFirst = Math.floor(Math.random() * 10000)
+  const randomNumSecond = Math.floor(Math.random() * 10000)
+  const randomNumThird = Math.floor(Math.random() * 10000)
+  return request(process.env.BASE_URL)
+    .patch('/v5/order/' + process.env.ORDER_ID)
+    .send({
+      clientPrice: randomNumFirst,
+      clientPaid: randomNumSecond,
+      vendorPrice: randomNumThird,
+      vendorPaid: randomNumThird,
+    })
+    .set('Authorization', process.env.TOKEN)
+}
+
+function deleteOrder() {
+  return request(process.env.BASE_URL)
+    .delete('/v5/order/' + process.env.ORDER_ID)
+    .set('Authorization', process.env.TOKEN)
+}
+
+export { createOrder, getAllOrders, getOrderById, editOrder, deleteOrder }

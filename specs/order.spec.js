@@ -2,6 +2,8 @@ import {
   createOrder,
   getAllOrders,
   getOrderById,
+  editOrder,
+  deleteOrder,
 } from '../helpers/order-helper'
 import { expect } from 'chai'
 
@@ -27,5 +29,19 @@ describe('Order', () => {
 
     expect(res.statusCode).to.eq(200)
     expect(res.body.message).to.eq('Get Order by id ok')
+  })
+
+  it('Edit order', async () => {
+    res = await editOrder()
+
+    expect(res.statusCode).to.eq(200)
+    expect(res.body.message).to.eq('Order updated')
+  })
+
+  it('Delete order', async () => {
+    res = await deleteOrder()
+
+    expect(res.statusCode).to.eq(200)
+    expect(res.body.message).to.eq('Order deleted')
   })
 })
