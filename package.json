@@ -4,7 +4,9 @@
   "description": "simple api automation test",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --config .mocharc.js"
+    "test": "mocha --spec specs/*.js",
+    "auth-test": "mocha --spec specs/auth.spec.js",
+    "pmrun": "newman run postman/Client.postman_collection.json -e postman/CB_v_5.postman_environment.json"
   },
   "keywords": [],
   "author": "Rustam Kutovyi",
@@ -18,6 +20,7 @@
     "dotenv": "^16.3.1",
     "mocha": "^10.2.0",
     "mochawesome": "^7.1.3",
+    "newman": "^6.0.0",
     "prettier": "^3.0.2",
     "supertest": "^6.3.3"
   }
