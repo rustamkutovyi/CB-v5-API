@@ -8,8 +8,8 @@ function createOrder() {
   return request(process.env.BASE_URL)
     .post('/v5/order')
     .send({
-      client: process.env.ID,
-      service: process.env.SERVICE_ID,
+      // client: process.env.ID,
+      // service: process.env.SERVICE_ID,
       clientPrice: randomNumFirst,
       clientPaid: randomNumSecond,
       vendorPrice: randomNumThird,
