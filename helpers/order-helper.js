@@ -1,6 +1,6 @@
 import request from 'supertest'
 
-function createOrder() {
+function createOrder(clientId, serviceId) {
   const randomNumFirst = Math.floor(Math.random() * 10000)
   const randomNumSecond = Math.floor(Math.random() * 10000)
   const randomNumThird = Math.floor(Math.random() * 10000)
@@ -10,6 +10,8 @@ function createOrder() {
     .send({
       // client: process.env.ID,
       // service: process.env.SERVICE_ID,
+      client: clientId,
+      service: serviceId,
       clientPrice: randomNumFirst,
       clientPaid: randomNumSecond,
       vendorPrice: randomNumThird,
@@ -25,18 +27,18 @@ function getAllOrders() {
     .set('Authorization', process.env.TOKEN)
 }
 
-function getOrderById() {
+function getOrderById(orderId) {
   return request(process.env.BASE_URL)
-    .get('/v5/order/' + process.env.ORDER_ID)
+    .get('/v5/order/' + orderId)
     .set('Authorization', process.env.TOKEN)
 }
 
-function editOrder() {
+function editOrder(orderId) {
   const randomNumFirst = Math.floor(Math.random() * 10000)
   const randomNumSecond = Math.floor(Math.random() * 10000)
   const randomNumThird = Math.floor(Math.random() * 10000)
   return request(process.env.BASE_URL)
-    .patch('/v5/order/' + process.env.ORDER_ID)
+    .patch('/v5/order/' + orderId)
     .send({
       clientPrice: randomNumFirst,
       clientPaid: randomNumSecond,

@@ -1,60 +1,129 @@
 import { expect } from 'chai'
-import * as clientHelper from '../helpers/client-helper'
-import * as serviceHelper from '../helpers/service-helper'
-import { createOrder } from '../helpers/order-helper'
+import { createClient } from '../helpers/client-helper'
+import { createService } from '../helpers/service-helper'
+import {
+  createOrder,
+  deleteOrder,
+  editOrder,
+  getAllOrders,
+  getOrderById,
+} from '../helpers/order-helper'
 
 describe('Orders', () => {
   describe('Create order', () => {
-    let res, clientId, serviceId
+    let response, clientId, serviceId
 
     before(async () => {
-      clientId = (await clientHelper.createClient()).body.payload
-      serviceId = (await serviceHelper.createService()).body.payload
+      clientId = (await createClient()).body.payload
+      serviceId = (await createService()).body.payload
 
-      res = await createOrder(clientId, serviceId)
+      response = await createOrder(clientId, serviceId)
     })
+
     it('check status code', () => {
-      // expect(res.statusCode).to.eq(200)
-      console.log(res.body)
+      expect(response.statusCode).to.eq(200)
+    })
+
+    it('check body message', () => {
+      expect(response.body.message).to.eq('Order created')
+    })
+
+    it('check if order has id', () => {
+      expect(response.body.payload).to.be.a('string')
     })
   })
 
-  it('Check status code', () => {
-    expect(res.statusCode).to.eq(200)
+  describe('Get all orders', () => {
+    let res
+
+    before(async () => {
+      res = await getAllOrders()
+    })
+
+    it('check status code', () => {
+      expect(res.statusCode).to.eq(200)
+    })
+
+    it('check body message', () => {
+      expect(res.body.message).to.eq('OrderSearch ok')
+    })
+
+    it('check if type of items is array', () => {
+      expect(res.body.payload.items).to.be.an('array')
+    })
   })
-})
 
-it('Create an order', async () => {
-  res = await createOrder()
+  describe('Get order by id', () => {
+    let response, clientId, serviceId, orderId, getSingleOrder
 
-  expect(res.statusCode).to.eq(200)
-  expect(res.body.message).to.eq('Order created')
-})
+    before(async () => {
+      clientId = (await createClient()).body.payload
+      serviceId = (await createService()).body.payload
 
-it('Get all orders', async () => {
-  res = await getAllOrders()
+      response = await createOrder(clientId, serviceId)
+      orderId = await response.body.payload
+      getSingleOrder = await getOrderById(orderId)
+    })
 
-  expect(res.statusCode).to.eq(200)
-  expect(res.body.message).to.eq('OrderSearch ok')
-})
+    it('check status code', () => {
+      expect(getSingleOrder.statusCode).to.eq(200)
+    })
 
-it('Get order by id', async () => {
-  res = await getOrderById()
+    it('check body message', () => {
+      expect(getSingleOrder.body.message).to.eq('Get Order by id ok')
+    })
 
-  expect(res.statusCode).to.eq(200)
-  expect(res.body.message).to.eq('Get Order by id ok')
-})
+    it('check if order id is correct', () => {
+      expect(getSingleOrder.body.payload._id).to.eq(orderId)
+    })
 
-it('Edit order', async () => {
-  res = await editOrder()
+    it('check if order has a client id', () => {
+      expect(getSingleOrder.body.payload.client._id).to.eq(clientId)
+    })
+  })
 
-  expect(res.statusCode).to.eq(200)
-  expect(res.body.message).to.eq('Order updated')
-})
+  describe('Edit order', () => {
+    let clientId, serviceId, orderId, res
 
-it('Delete order', async () => {
-  res = await deleteOrder()
+    before(async () => {
+      clientId = (await createClient()).body.payload
+      serviceId = (await createService()).body.payload
+      orderId = (await createOrder(clientId, serviceId)).body.payload
+      res = await editOrder(orderId)
+    })
 
-  expect(res.statusCode).to.eq(200)
-  expect(res.body.message).to.eq('Order deleted')
+    it('check status code', () => {
+      expect(res.statusCode).to.eq(200)
+    })
+
+    it('check body message', () => {
+      expect(res.body.message).to.eq('Order updated')
+    })
+  })
+
+  describe('Delete order', () => {
+    let clientId, serviceId, orderId, res
+
+    before(async () => {
+      clientId = (await createClient()).body.payload
+      serviceId = (await createService()).body.payload
+      orderId = (await createOrder(clientId, serviceId)).body.payload
+      res = await deleteOrder(orderId)
+    })
+
+    it('check status code', () => {
+      expect(res.statusCode).to.eq(200)
+    })
+
+    it('check body body message', () => {
+      expect(res.body.message).to.eq('Order deleted')
+    })
+  })
+
+  after('Delete all orders', async () => {
+    const ordersList = (await getAllOrders()).body.payload.items
+    for (let i = 0; i < ordersList.length; i++) {
+      await deleteOrder(ordersList[i]._id)
+    }
+  })
 })
