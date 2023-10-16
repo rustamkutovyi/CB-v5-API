@@ -120,10 +120,10 @@ describe('Orders', () => {
     })
   })
 
-  after('Delete all orders', async () => {
-    const ordersList = (await getAllOrders()).body.payload.items
-    for (let i = 0; i < ordersList.length; i++) {
-      await deleteOrder(ordersList[i]._id)
-    }
-  })
+  // after('Delete all orders', async () => {
+  //   const ordersList = (await getAllOrders()).body.payload.items
+  //   for (let i = 0; i < ordersList.length; i++) {
+  //     await deleteOrder(ordersList[i]._id)
+  //   }
+  // })
 })
