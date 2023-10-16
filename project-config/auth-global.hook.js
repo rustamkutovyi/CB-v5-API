@@ -28,9 +28,9 @@ before(async () => {
   process.env.PHONE = response.body.payload.items[0].phone
 })
 
-after(async () => {
-  await deleteClient()
-})
+// after(async () => {
+//   await deleteClient()
+// })
 
 before(async () => {
   const response = await createVendor()
