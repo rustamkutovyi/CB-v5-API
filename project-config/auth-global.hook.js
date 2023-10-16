@@ -14,24 +14,6 @@ before(async () => {
   process.env.TOKEN = response.body.payload.token
 })
 
-// before(async () => {
-//   const response = await createClient()
-//
-//   process.env.ID = response.body.payload
-// })
-
-before(async () => {
-  const response = await searchAllClients()
-
-  process.env.ID = response.body.payload.items[0]._id
-  process.env.CLIENT_NAME = response.body.payload.items[0].name
-  process.env.PHONE = response.body.payload.items[0].phone
-})
-
-// after(async () => {
-//   await deleteClient()
-// })
-
 before(async () => {
   const response = await createVendor()
 

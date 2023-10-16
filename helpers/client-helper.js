@@ -9,9 +9,9 @@ function createClient(name = chance.first(), phone = Date.now()) {
     .set('Authorization', process.env.TOKEN)
 }
 
-function searchClientByID() {
+function searchClientByID(clientId) {
   return request(process.env.BASE_URL)
-    .get('/v5/client/' + process.env.ID)
+    .get('/v5/client/' + clientId)
     .set('Authorization', process.env.TOKEN)
 }
 
@@ -21,32 +21,32 @@ function searchAllClients() {
     .set('Authorization', process.env.TOKEN)
 }
 
-function searchClientByName() {
+function searchClientByName(clientName) {
   return request(process.env.BASE_URL)
     .post('/v5/client/search')
-    .send({ name: process.env.CLIENT_NAME })
+    .send({ name: clientName })
     .set('Authorization', process.env.TOKEN)
 }
-function searchClientByPhone() {
+function searchClientByPhone(clientPhone) {
   return request(process.env.BASE_URL)
     .post('/v5/client/search')
-    .send({ phone: process.env.PHONE })
+    .send({ phone: clientPhone })
     .set('Authorization', process.env.TOKEN)
 }
 function editClient(
-  name = chance.first(),
+  clientId,
   phone = Date.now(),
   email = 'user_' + Date.now() + '@gmail.com'
 ) {
   return request(process.env.BASE_URL)
-    .patch('/v5/client/' + process.env.ID)
-    .send(name, phone, email)
+    .patch('/v5/client/' + clientId)
+    .send({ phone, email })
     .set('Authorization', process.env.TOKEN)
 }
 
-function deleteClient() {
+function deleteClient(clientId) {
   return request(process.env.BASE_URL)
-    .delete('/v5/client/' + process.env.ID)
+    .delete('/v5/client/' + clientId)
     .set('Authorization', process.env.TOKEN)
 }
 
