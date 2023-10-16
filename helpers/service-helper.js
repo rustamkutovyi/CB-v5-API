@@ -1,14 +1,13 @@
 import request from 'supertest'
 
-function createService(
-  name = 'Service' + Date.now(),
-  vendor = process.env.VENDOR_ID,
-  vendorPrice = 900,
-  clientPrice = 700
-) {
+function createService(vendorId) {
+  const vendorPrice = Math.floor(Math.random() * 100)
+  const clientPrice = Math.floor(Math.random() * 100)
+  const name = 'Service' + Date.now()
+
   return request(process.env.BASE_URL)
     .post('/v5/service')
-    .send({ name, vendor, vendorPrice, clientPrice })
+    .send({ name, vendorId, vendorPrice, clientPrice })
     .set('Authorization', process.env.TOKEN)
 }
 

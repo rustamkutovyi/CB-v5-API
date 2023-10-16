@@ -7,8 +7,22 @@ import {
   deleteService,
 } from '../helpers/service-helper'
 import { expect } from 'chai'
+import { searchAllVendors } from '../helpers/vendor-helper'
 
 describe('Service', () => {
+  describe('Create service', () => {
+    let res, vendorId
+    before(async () => {
+      vendorId = (await searchAllVendors()).body.payload.items[0]._id
+      res = await createService(vendorId)
+    })
+
+    it('check status code', () => {
+      // expect(res.statusCode).to.eq(200)
+      console.log(res.body)
+    })
+  })
+
   let response
 
   it('Create service', async () => {
