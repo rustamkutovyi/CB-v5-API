@@ -7,49 +7,106 @@ import {
   deleteService,
 } from '../helpers/service-helper'
 import { expect } from 'chai'
+import { searchAllVendors } from '../helpers/vendor-helper'
 
 describe('Service', () => {
-  let response
+  describe('Create service', () => {
+    let res, vendorId
+    before(async () => {
+      vendorId = (await searchAllVendors()).body.payload.items[0]._id
+      res = await createService(vendorId)
+    })
 
-  it('Create service', async () => {
-    response = await createService()
-
-    expect(response.statusCode).to.eq(200)
-    expect(response.body.message).to.eq('Service created')
+    it('check status code', () => {
+      expect(res.statusCode).to.eq(200)
+    })
+    it('check body message', () => {
+      expect(res.body.message).to.eq('Service created')
+    })
+    it('check if created service has id', () => {
+      expect(res.body.payload).to.be.a('string')
+    })
   })
 
-  it('Get all services', async () => {
-    response = await getAllServices()
+  describe('Get all services', () => {
+    let res
+    before(async () => {
+      res = await getAllServices()
+    })
 
-    expect(response.statusCode).to.eq(200)
-    expect(response.body.message).to.eq('Service Search ok')
+    it('check status code', () => {
+      expect(res.statusCode).to.eq(200)
+    })
+    it('check body message', () => {
+      expect(res.body.message).to.eq('Service Search ok')
+    })
+    it('check if type of items is array', () => {
+      expect(res.body.payload.items).to.be.an('array')
+    })
   })
 
-  it('Get service by id', async () => {
-    response = await getServiceById()
+  describe('Get service by id', () => {
+    let res, serviceId
+    before(async () => {
+      serviceId = (await getAllServices()).body.payload.items[0]._id
+      res = await getServiceById(serviceId)
+    })
 
-    expect(response.statusCode).to.eq(200)
-    expect(response.body.message).to.eq('Get Service by id ok')
+    it('check status code', () => {
+      expect(res.statusCode).to.eq(200)
+    })
+    it('check body message', () => {
+      expect(res.body.message).to.eq('Get Service by id ok')
+    })
   })
 
-  it('Get service by name', async () => {
-    response = await getServiceByName()
+  describe('Get service by name', () => {
+    let res, serviceName
+    before(async () => {
+      serviceName = (await getAllServices()).body.payload.items[0].name
+      res = await getServiceByName(serviceName)
+    })
 
-    expect(response.statusCode).to.eq(200)
-    expect(response.body.message).to.eq('Service Search ok')
+    it('check status code', () => {
+      expect(res.statusCode).to.eq(200)
+    })
+    it('check body message', () => {
+      expect(res.body.message).to.eq('Service Search ok')
+    })
   })
 
-  it('Edit service', async () => {
-    response = await editService()
+  describe('Edit service', () => {
+    let res, serviceId
+    before(async () => {
+      serviceId = (await getAllServices()).body.payload.items[0]._id
+      res = await editService(serviceId)
+    })
 
-    expect(response.statusCode).to.eq(200)
-    expect(response.body.message).to.eq('Service updated')
+    it('check status code', () => {
+      expect(res.statusCode).to.eq(200)
+    })
+    it('check body message', () => {
+      expect(res.body.message).to.eq('Service updated')
+    })
   })
 
-  it('Delete service', async () => {
-    response = await deleteService()
+  describe('Delete service', () => {
+    let res, serviceId, getSingleService
+    before(async () => {
+      serviceId = (await getAllServices()).body.payload.items[0]._id
+      res = await deleteService(serviceId)
+      getSingleService = await getServiceById(serviceId)
+    })
 
-    expect(response.statusCode).to.eq(200)
-    expect(response.body.message).to.eq('Service deleted')
+    it('check status code', () => {
+      expect(res.statusCode).to.eq(200)
+    })
+    it('check body message', () => {
+      expect(res.body.message).to.eq('Service deleted')
+    })
+    it('check if service was deleted', () => {
+      expect(getSingleService.statusCode).to.eq(404)
+      expect(getSingleService.body.message).to.eq('No service for provided id')
+    })
   })
 })

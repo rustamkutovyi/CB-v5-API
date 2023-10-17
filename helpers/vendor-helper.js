@@ -19,29 +19,29 @@ function searchAllVendors() {
     .set('Authorization', process.env.TOKEN)
 }
 
-function getVendorByName() {
+function getVendorByName(vendorName) {
   return request(process.env.BASE_URL)
     .post('/v5/vendor/search')
-    .send({ name: process.env.VENDOR_NAME })
+    .send({ name: vendorName })
     .set('Authorization', process.env.TOKEN)
 }
 
-function searchVendorById() {
+function searchVendorById(vendorId) {
   return request(process.env.BASE_URL)
-    .get('/v5/vendor/' + process.env.VENDOR_ID)
+    .get('/v5/vendor/' + vendorId)
     .set('Authorization', process.env.TOKEN)
 }
 
-function editVendor(name = chance.first()) {
+function editVendor(vendorId, name = chance.first()) {
   return request(process.env.BASE_URL)
-    .patch('/v5/vendor/' + process.env.VENDOR_ID)
+    .patch('/v5/vendor/' + vendorId)
     .send({ name })
     .set('Authorization', process.env.TOKEN)
 }
 
-function deleteVendor() {
+function deleteVendor(vendorId) {
   return request(process.env.BASE_URL)
-    .delete('/v5/vendor/' + process.env.VENDOR_ID)
+    .delete('/v5/vendor/' + vendorId)
     .set('Authorization', process.env.TOKEN)
 }
 
