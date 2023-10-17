@@ -48,9 +48,9 @@ function editOrder(orderId) {
     .set('Authorization', process.env.TOKEN)
 }
 
-function deleteOrder() {
+function deleteOrder(orderId) {
   return request(process.env.BASE_URL)
-    .delete('/v5/order/' + process.env.ORDER_ID)
+    .delete('/v5/order/' + orderId)
     .set('Authorization', process.env.TOKEN)
 }
 
