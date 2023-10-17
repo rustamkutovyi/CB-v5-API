@@ -7,7 +7,12 @@ function createService(vendorId) {
 
   return request(process.env.BASE_URL)
     .post('/v5/service')
-    .send({ name, vendorId, vendorPrice, clientPrice })
+    .send({
+      name: name,
+      vendor: vendorId,
+      vendorPrice: vendorPrice,
+      clientPrice: clientPrice,
+    })
     .set('Authorization', process.env.TOKEN)
 }
 
@@ -17,22 +22,22 @@ function getAllServices() {
     .set('Authorization', process.env.TOKEN)
 }
 
-function getServiceById() {
+function getServiceById(serviceId) {
   return request(process.env.BASE_URL)
-    .get('/v5/service/' + process.env.SERVICE_ID)
+    .get('/v5/service/' + serviceId)
     .set('Authorization', process.env.TOKEN)
 }
 
-function getServiceByName() {
+function getServiceByName(serviceName) {
   return request(process.env.BASE_URL)
     .post('/v5/service/search')
-    .send({ name: process.env.SERVICE_NAME })
+    .send({ name: serviceName })
     .set('Authorization', process.env.TOKEN)
 }
 
-function editService() {
+function editService(serviceId) {
   return request(process.env.BASE_URL)
-    .patch('/v5/service/' + process.env.SERVICE_ID)
+    .patch('/v5/service/' + serviceId)
     .send({
       vendorPrice: '3000',
       clientPrice: '1000',
@@ -40,9 +45,9 @@ function editService() {
     .set('Authorization', process.env.TOKEN)
 }
 
-function deleteService() {
+function deleteService(serviceId) {
   return request(process.env.BASE_URL)
-    .delete('/v5/service/' + process.env.SERVICE_ID)
+    .delete('/v5/service/' + serviceId)
     .set('Authorization', process.env.TOKEN)
 }
 
