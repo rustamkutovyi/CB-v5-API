@@ -8,6 +8,9 @@ import {
   searchClientByPhone,
 } from '../helpers/client-helper'
 import { expect } from 'chai'
+import request from 'supertest'
+
+const chance = require('chance').Chance()
 
 describe('Clients', () => {
   describe('Create client', () => {
@@ -139,5 +142,79 @@ describe('Clients', () => {
     for (let i = 0; i < clientsList.length; i++) {
       await deleteClient(clientsList[i]._id)
     }
+  })
+})
+
+describe('Negative tests for Client', () => {
+  let res, clientId
+
+  it('Create client without authorization', async () => {
+    res = await request(process.env.BASE_URL).post('/v5/client').send({
+      name: chance.name(),
+      phone: chance.phone(),
+    })
+
+    expect(res.statusCode).to.eq(400)
+    expect(res.body.message).to.eq('Auth failed')
+  })
+
+  it('Create client with empty fields', async () => {
+    res = await request(process.env.BASE_URL)
+      .post('/v5/client')
+      .send({
+        name: '',
+        phone: '',
+      })
+      .set('Authorization', process.env.TOKEN)
+
+    expect(res.statusCode).to.eq(400)
+    expect(res.body.message).to.eq('Client create error')
+  })
+  before(async () => {
+    clientId = (await createClient()).body.payload
+  })
+
+  it('Edit client without authorization', async () => {
+    res = await request(process.env.BASE_URL)
+      .patch('/v5/client/' + clientId)
+      .send({
+        name: chance.name(),
+        phone: chance.phone(),
+      })
+
+    expect(res.statusCode).to.eq(400)
+    expect(res.body.message).to.eq('Auth failed')
+  })
+
+  it('Edit client with empty fields', async () => {
+    res = await request(process.env.BASE_URL)
+      .patch('/v5/client/' + clientId)
+      .send({
+        name: '',
+        phone: '',
+      })
+      .set('Authorization', process.env.TOKEN)
+
+    expect(res.statusCode).to.eq(400)
+    expect(res.body.message).to.eq('Client update error')
+  })
+
+  before(async () => {
+    clientId = (await createClient()).body.payload
+    res = await deleteClient(clientId)
+  })
+
+  it('Delete not existing client', async () => {
+    res = await request(process.env.BASE_URL)
+      .delete('/v5/client/' + clientId)
+      .set('Authorization', process.env.TOKEN)
+    expect(res.statusCode).to.eq(400)
+    expect(res.body.message).to.eq('Client not found')
+  })
+
+  it('Delete client without authorization', async () => {
+    res = await request(process.env.BASE_URL).delete('/v5/client/' + clientId)
+    expect(res.statusCode).to.eq(400)
+    expect(res.body.message).to.eq('Auth failed')
   })
 })
