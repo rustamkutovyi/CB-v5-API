@@ -7,6 +7,9 @@ import {
   deleteVendor,
 } from '../helpers/vendor-helper'
 import { expect } from 'chai'
+import request from 'supertest'
+
+const chance = require('chance').Chance()
 
 describe('Vendor', () => {
   describe('Create vendor', () => {
@@ -113,11 +116,55 @@ describe('Vendor', () => {
       expect(getSingleVendor.body.message).to.eq('No vendor for provided id')
     })
   })
+})
 
-  // after('Delete all vendors', async () => {
-  //   const vendorsList = (await searchAllVendors()).body.payload.items
-  //   for (let i = 0; i < vendorsList.length; i++) {
-  //     await deleteVendor(vendorsList[i]._id)
-  //   }
-  // })
+describe('Vendor negative tests', () => {
+  describe('Create vendor without authorization', () => {
+    let res
+    before(async () => {
+      res = await request(process.env.BASE_URL)
+        .post('/v5/vendor')
+        .send({ name: chance.name() })
+    })
+
+    it('Check status code', () => {
+      expect(res.statusCode).to.eq(400)
+    })
+    it('Check body message', () => {
+      expect(res.body.message).to.eq('Auth failed')
+    })
+  })
+  describe('Create vendor with empty required field', () => {
+    let res
+    before(async () => {
+      res = await request(process.env.BASE_URL)
+        .post('/v5/vendor')
+        .send({ name: '' })
+        .set('Authorization', process.env.TOKEN)
+    })
+
+    it('Check status code', () => {
+      expect(res.statusCode).to.eq(400)
+    })
+    it('Check body message', () => {
+      expect(res.body.message).to.eq('Vendor create error')
+    })
+  })
+
+  describe('Update vendor without authorization', () => {
+    let res, vendorId
+    before(async () => {
+      vendorId = (await searchAllVendors()).body.payload.items[0]._id
+      res = await request(process.env.BASE_URL)
+        .patch('/v5/vendor/' + vendorId)
+        .send({ name: chance.name() })
+    })
+
+    it('Check status code', () => {
+      expect(res.statusCode).to.eq(400)
+    })
+    it('Check body message', () => {
+      expect(res.body.message).to.eq('Auth failed')
+    })
+  })
 })
