@@ -8,6 +8,7 @@ import {
   getAllOrders,
   getOrderById,
 } from '../helpers/order-helper'
+import request from 'supertest'
 
 describe('Orders', () => {
   describe('Create order', () => {
@@ -120,10 +121,61 @@ describe('Orders', () => {
     })
   })
 
-  after('Delete all orders', async () => {
-    const ordersList = (await getAllOrders()).body.payload.items
-    for (let i = 0; i < ordersList.length; i++) {
-      await deleteOrder(ordersList[i]._id)
-    }
+  // after('Delete all orders', async () => {
+  //   const ordersList = (await getAllOrders()).body.payload.items
+  //   for (let i = 0; i < ordersList.length; i++) {
+  //     await deleteOrder(ordersList[i]._id)
+  //   }
+  // })
+})
+
+describe('Order negative tests', () => {
+  describe('Create order with empty fields', () => {
+    let res
+    before(async () => {
+      res = await request(process.env.BASE_URL)
+        .post('/v5/order')
+        .send({
+          client: '',
+          service: '',
+          clientPrice: 400,
+          clientPaid: '',
+          vendorPrice: 2500,
+          vendorPaid: '400',
+          notes: 'First Order',
+        })
+        .set('Authorization', process.env.TOKEN)
+    })
+
+    it('Check status code', () => {
+      expect(res.statusCode).to.eq(400)
+    })
+    it('Check body message', () => {
+      expect(res.body.message).to.eq('Order create error')
+    })
+  })
+
+  describe('Create service without authorization', () => {
+    let res, clientId, serviceId
+    before(async () => {
+      clientId = (await createClient()).body.payload
+      serviceId = (await createService()).body.payload
+      res = await request(process.env.BASE_URL).post('/v5/order').send({
+        client: clientId,
+        service: serviceId,
+        clientPrice: 400,
+        clientPaid: 600,
+        vendorPrice: 2500,
+        vendorPaid: 400,
+        notes: 'First Order',
+      })
+    })
+
+    it('Check status code', () => {
+      expect(res.statusCode).to.eq(400)
+    })
+    it('Check body message', () => {
+      expect(res.body.message).to.eq('Auth failed')
+    })
   })
 })
